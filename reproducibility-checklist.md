@@ -94,4 +94,3 @@ For reproducibility issues or questions:
 
 ---
 
-**Certification**: This implementation produces reproducible results. All experiments can be re-run with identical outcomes given the same seed and environment.
