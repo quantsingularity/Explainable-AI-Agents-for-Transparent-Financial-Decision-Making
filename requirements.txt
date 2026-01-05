@@ -1,0 +1,70 @@
+# Core ML/Data Science
+numpy==1.24.3
+pandas==2.0.3
+scikit-learn==1.3.0
+scipy==1.11.1
+
+# Deep Learning
+torch==2.0.1
+tensorflow==2.13.0
+
+# XAI Libraries
+shap==0.42.1
+lime==0.2.0.1
+captum==0.6.0
+dice-ml==0.9
+
+# Gradient Boosting
+xgboost==1.7.6
+lightgbm==4.0.0
+
+# Visualization
+matplotlib==3.7.2
+seaborn==0.12.2
+plotly==5.15.0
+
+# Diagrams
+graphviz==0.20.1
+diagrams==0.23.3
+
+# LLM / NLP (using local/mock for reproducibility)
+transformers==4.31.0
+openai==0.27.8
+tiktoken==0.4.0
+
+# Data Fetching
+requests==2.31.0
+kaggle==1.5.16
+
+# Logging & Config
+loguru==0.7.0
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# Testing
+pytest==7.4.0
+pytest-cov==4.1.0
+
+# Type Checking
+mypy==1.4.1
+
+# Jupyter (for exploration)
+jupyter==1.0.0
+ipywidgets==8.1.0
+
+# Statistics
+statsmodels==0.14.0
+pingouin==0.5.3
+
+# API / Web
+flask==2.3.2
+fastapi==0.100.0
+uvicorn==0.23.1
+
+# Utilities
+tqdm==4.65.0
+joblib==1.3.1
+click==8.1.6
+
+# Deterministic hashing
+xxhash==3.2.0

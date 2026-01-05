@@ -1,0 +1,28 @@
+{
+  "instance_id": 0,
+  "decision": {
+    "prediction": 1,
+    "probability": 0.7854689836586477
+  },
+  "xai_explanation": {
+    "method": "shap",
+    "attributions": {
+      "credit_score": 1.7872430785907651,
+      "annual_income": -0.08705942465619046,
+      "debt_to_income": -0.7913376840813613,
+      "employment_length": -0.1920933027486883,
+      "loan_amount": 0.451106763923635
+    },
+    "faithfulness": 0.81
+  },
+  "narrative": {
+    "text": "Loan APPROVED (confidence: 78.5%)\n\nTop factors:\n- credit_score: +1.7872\n- debt_to_income: -0.7913\n- loan_amount: +0.4511",
+    "top_features": [
+      "credit_score",
+      "debt_to_income",
+      "loan_amount",
+      "employment_length",
+      "annual_income"
+    ]
+  }
+}

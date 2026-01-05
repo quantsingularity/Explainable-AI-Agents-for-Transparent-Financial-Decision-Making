@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  xai-finance:
+    build: .
+    container_name: xai_finance_agents
+    volumes:
+      - ./data:/workspace/data
+      - ./results:/workspace/results
+      - ./figures:/workspace/figures
+    environment:
+      - PYTHONPATH=/workspace/code
+      - EXPERIMENT_MODE=quick
+      - DETERMINISTIC_SEED=42
+    ports:
+      - "8888:8888"  # Jupyter
+      - "5000:5000"  # Flask UI
+    command: /bin/bash
