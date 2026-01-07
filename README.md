@@ -21,19 +21,6 @@ This repository contains a fully implemented multi-agent XAI system for financia
 ./run_full.sh
 ```
 
-## What This Implements
-
-- ✅ Multi-agent architecture (Decision, XAI, Explanation, Evidence Collector, Orchestrator)
-- ✅ Multiple XAI methods (SHAP, LIME, Integrated Gradients, Counterfactuals)
-- ✅ LLM-based narrative explanation generation
-- ✅ Real experiments on LendingClub loan data
-- ✅ 5+ publication-ready figures generated from results
-- ✅ Automated faithfulness, fidelity, completeness metrics
-- ✅ Synthetic human evaluation with statistical tests
-- ✅ Full audit logging and replay capability
-- ✅ PII redaction and safety guardrails
-- ✅ Reproducible via Docker with pinned dependencies
-
 ## Repository Structure
 
 ```
@@ -50,15 +37,11 @@ xai_finance_agents/
 ├── data/                # Datasets and README
 ├── figures/             # Generated publication figures
 ├── results/             # Experiment outputs (CSVs, logs)
-├── paper_ml/            # LaTeX paper (ML conference style)
-├── paper_practitioner/  # LaTeX paper (regulatory style)
-├── ethics/              # Human study materials, compliance
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 ├── run_quick.sh
 ├── run_full.sh
-└── reproducibility-checklist.md
 ```
 
 ## Datasets Used
@@ -113,11 +96,3 @@ pytest tests/test_integration.py
 ## CI/CD
 
 GitHub Actions runs unit tests and quick integration test on every PR.
-
-## Reproducibility
-
-See `reproducibility-checklist.md` for full details on:
-- Deterministic seed handling
-- Environment pinning
-- Log replay capability
-- Statistical test procedures
