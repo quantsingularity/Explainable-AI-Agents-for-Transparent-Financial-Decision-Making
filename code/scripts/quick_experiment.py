@@ -1,6 +1,7 @@
 """
 Streamlined experiment runner that works with minimal dependencies.
 """
+
 import os
 import sys
 import json
@@ -17,9 +18,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 results_dir = "results/quick_run"
 os.makedirs(results_dir, exist_ok=True)
 
-print("="*60)
+print("=" * 60)
 print("XAI Finance Agents - Quick Experiment")
-print("="*60)
+print("=" * 60)
 
 # Generate synthetic data
 print("\n[1/5] Generating synthetic loan data...")
@@ -34,21 +35,27 @@ loan_amount = (annual_income * np.random.uniform(0.2, 0.5, n_samples)).clip(1000
 
 # Target: loan approved
 approval_score = (
-    (credit_score - 600) / 250 +
-    (1 - debt_to_income / 0.6) +
-    np.log(annual_income) / 12 +
-    employment_length / 40
+    (credit_score - 600) / 250
+    + (1 - debt_to_income / 0.6)
+    + np.log(annual_income) / 12
+    + employment_length / 40
 )
 approval_prob = 1 / (1 + np.exp(-approval_score + 2))
 loan_status = (approval_prob + np.random.normal(0, 0.1, n_samples) > 0.5).astype(int)
 
 # Create dataset
-X = np.column_stack([credit_score, annual_income, debt_to_income, 
-                     employment_length, loan_amount])
+X = np.column_stack(
+    [credit_score, annual_income, debt_to_income, employment_length, loan_amount]
+)
 y = loan_status
 
-feature_names = ['credit_score', 'annual_income', 'debt_to_income', 
-                'employment_length', 'loan_amount']
+feature_names = [
+    "credit_score",
+    "annual_income",
+    "debt_to_income",
+    "employment_length",
+    "loan_amount",
+]
 
 print(f"Generated {n_samples} samples, {len(feature_names)} features")
 print(f"Approval rate: {y.mean():.1%}")
@@ -71,18 +78,18 @@ results = []
 
 for model_name, model in [
     ("logistic", LogisticRegression(random_state=42, max_iter=1000)),
-    ("tree", DecisionTreeClassifier(max_depth=5, random_state=42))
+    ("tree", DecisionTreeClassifier(max_depth=5, random_state=42)),
 ]:
     print(f"\n  Training {model_name}...")
     model.fit(X_train, y_train)
-    
+
     y_pred = model.predict(X_test)
     y_proba = model.predict_proba(X_test)[:, 1]
-    
+
     auc = roc_auc_score(y_test, y_proba)
     precision = precision_score(y_test, y_pred)
     recall = recall_score(y_test, y_pred)
-    
+
     # Simulate XAI metrics
     if model_name == "logistic":
         faithfulness_shap, faithfulness_lime = 0.81, 0.74
@@ -90,31 +97,35 @@ for model_name, model in [
     else:
         faithfulness_shap, faithfulness_lime = 0.78, 0.71
         completeness_shap, completeness_lime = 0.82, 0.75
-    
-    results.append({
-        'model_type': model_name,
-        'xai_method': 'shap',
-        'auc': auc,
-        'precision': precision,
-        'recall': recall,
-        'mean_faithfulness': faithfulness_shap,
-        'std_faithfulness': 0.08,
-        'mean_completeness': completeness_shap,
-        'mean_explanation_time': 0.125 if model_name == "logistic" else 0.110
-    })
-    
-    results.append({
-        'model_type': model_name,
-        'xai_method': 'lime',
-        'auc': auc,
-        'precision': precision,
-        'recall': recall,
-        'mean_faithfulness': faithfulness_lime,
-        'std_faithfulness': 0.10,
-        'mean_completeness': completeness_lime,
-        'mean_explanation_time': 0.340 if model_name == "logistic" else 0.290
-    })
-    
+
+    results.append(
+        {
+            "model_type": model_name,
+            "xai_method": "shap",
+            "auc": auc,
+            "precision": precision,
+            "recall": recall,
+            "mean_faithfulness": faithfulness_shap,
+            "std_faithfulness": 0.08,
+            "mean_completeness": completeness_shap,
+            "mean_explanation_time": 0.125 if model_name == "logistic" else 0.110,
+        }
+    )
+
+    results.append(
+        {
+            "model_type": model_name,
+            "xai_method": "lime",
+            "auc": auc,
+            "precision": precision,
+            "recall": recall,
+            "mean_faithfulness": faithfulness_lime,
+            "std_faithfulness": 0.10,
+            "mean_completeness": completeness_lime,
+            "mean_explanation_time": 0.340 if model_name == "logistic" else 0.290,
+        }
+    )
+
     print(f"    AUC: {auc:.3f}, Precision: {precision:.3f}, Recall: {recall:.3f}")
 
 # Save results
@@ -142,30 +153,37 @@ attributions = dict(zip(feature_names, model.coef_[0] * test_instance))
 
 example_explanation = {
     "instance_id": test_idx,
-    "decision": {
-        "prediction": int(pred),
-        "probability": float(proba)
-    },
+    "decision": {"prediction": int(pred), "probability": float(proba)},
     "xai_explanation": {
         "method": "shap",
         "attributions": {k: float(v) for k, v in attributions.items()},
-        "faithfulness": 0.81
+        "faithfulness": 0.81,
     },
     "narrative": {
-        "text": f"Loan {'APPROVED' if pred == 1 else 'DENIED'} (confidence: {proba:.1%})\n\nTop factors:\n" +
-                "\n".join([f"- {k}: {v:+.4f}" for k, v in sorted(attributions.items(), 
-                          key=lambda x: abs(x[1]), reverse=True)[:3]]),
-        "top_features": [k for k, v in sorted(attributions.items(), 
-                         key=lambda x: abs(x[1]), reverse=True)[:5]]
-    }
+        "text": f"Loan {'APPROVED' if pred == 1 else 'DENIED'} (confidence: {proba:.1%})\n\nTop factors:\n"
+        + "\n".join(
+            [
+                f"- {k}: {v:+.4f}"
+                for k, v in sorted(
+                    attributions.items(), key=lambda x: abs(x[1]), reverse=True
+                )[:3]
+            ]
+        ),
+        "top_features": [
+            k
+            for k, v in sorted(
+                attributions.items(), key=lambda x: abs(x[1]), reverse=True
+            )[:5]
+        ],
+    },
 }
 
 example_path = os.path.join(results_dir, "example_explanation.json")
-with open(example_path, 'w') as f:
+with open(example_path, "w") as f:
     json.dump(example_explanation, f, indent=2)
 
 print(f"  Example saved to {example_path}")
-print("\n" + "="*60)
+print("\n" + "=" * 60)
 print("Quick experiment complete!")
 print(f"Results directory: {results_dir}")
-print("="*60)
+print("=" * 60)
