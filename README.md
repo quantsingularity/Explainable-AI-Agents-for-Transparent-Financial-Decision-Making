@@ -53,12 +53,14 @@ xai_finance_agents/
 ## Compute Requirements
 
 ### Quick Run (~30 minutes)
+
 - **CPU**: 4 cores
 - **RAM**: 8GB
 - **Storage**: 2GB
 - **Cost**: $0 (runs on CPU)
 
 ### Full Run (~6 hours)
+
 - **CPU/GPU**: 8 cores or 1 GPU (Tesla T4 equivalent)
 - **RAM**: 16GB
 - **Storage**: 10GB
@@ -92,7 +94,3 @@ pytest tests/
 # Run integration test (quick experiment)
 pytest tests/test_integration.py
 ```
-
-## CI/CD
-
-GitHub Actions runs unit tests and quick integration test on every PR.
