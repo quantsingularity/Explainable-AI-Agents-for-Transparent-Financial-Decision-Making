@@ -1,0 +1,92 @@
+# Prometheus Alert Rules for XAI Agents
+
+groups:
+  - name: xai_agents_alerts
+    interval: 30s
+    rules:
+      # High Error Rate Alert
+      - alert: HighErrorRate
+        expr: |
+          (
+            rate(xai_predictions_total{status="failure"}[5m])
+            /
+            rate(xai_predictions_total[5m])
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High prediction error rate"
+          description: "Error rate is {{ $value | humanizePercentage }} for model {{ $labels.model_name }}"
+
+      # High Latency Alert
+      - alert: HighPredictionLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(xai_prediction_latency_seconds_bucket[5m])
+          ) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High prediction latency"
+          description: "95th percentile latency is {{ $value }}s for model {{ $labels.model_name }}"
+
+      # Very High Explanation Latency
+      - alert: VeryHighExplanationLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(xai_explanation_latency_seconds_bucket[5m])
+          ) > 10.0
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Very high explanation latency"
+          description: "95th percentile explanation latency is {{ $value }}s for {{ $labels.method }}"
+
+      # No Models Loaded
+      - alert: NoModelsLoaded
+        expr: xai_models_loaded == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "No models loaded"
+          description: "XAI system has no models loaded and cannot serve predictions"
+
+      # Low Cache Hit Rate
+      - alert: LowCacheHitRate
+        expr: |
+          (
+            rate(xai_cache_hits_total[10m])
+            /
+            (rate(xai_cache_hits_total[10m]) + rate(xai_cache_misses_total[10m]))
+          ) < 0.3
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low cache hit rate"
+          description: "Cache hit rate is {{ $value | humanizePercentage }} for {{ $labels.cache_type }}"
+
+      # High Memory Usage (would need additional metrics)
+      - alert: HighMemoryUsage
+        expr: |
+          (process_resident_memory_bytes / process_virtual_memory_max_bytes) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is at {{ $value | humanizePercentage }}"
+
+      # API Down
+      - alert: APIDown
+        expr: up{job="xai-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "XAI API is down"
+          description: "XAI API has been down for more than 1 minute"

@@ -1,0 +1,43 @@
+# Production Dockerfile for XAI Agents
+FROM python:3.10-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY requirements.txt .
+COPY requirements-api.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir -r requirements-api.txt
+
+# Copy application code
+COPY code/ /app/code/
+COPY api/ /app/api/
+COPY data/ /app/data/
+
+# Create directories for outputs
+RUN mkdir -p /app/results /app/visualizations /app/models
+
+# Expose API port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
+
+# Run the API server
+CMD ["uvicorn", "api.api_server:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]

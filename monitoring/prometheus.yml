@@ -1,0 +1,31 @@
+# Prometheus Configuration for XAI Agents
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: "xai-agents-production"
+    environment: "production"
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+# Scrape configurations
+scrape_configs:
+  # XAI API metrics
+  - job_name: "xai-api"
+    static_configs:
+      - targets: ["xai-api:8000"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
+
+  # Prometheus itself
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+# Alerting rules
+rule_files:
+  - "alert_rules.yml"
