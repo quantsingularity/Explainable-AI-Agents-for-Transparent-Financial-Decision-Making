@@ -380,12 +380,12 @@ class AdaptiveExplainer:
 
 ## Summary Recommendations
 
-✅ **Default Choice:** Start with **LIME** for most use cases
-✅ **High Accuracy Needed:** Use **SHAP** (especially for regulated industries)
-✅ **Tree Models:** Always use **SHAP TreeExplainer** (massive speedup)
-✅ **Neural Networks:** Use **Integrated Gradients** or **SHAP**
-✅ **What-if Analysis:** Use **Counterfactual Explanations**
-✅ **Production/Real-time:** Use **LIME** or **Feature Importance**
+✅ **Default Choice:** Start with **LIME** for most use cases  
+✅ **High Accuracy / Regulatory Needs:** Use **SHAP** (ideal for regulated industries)  
+✅ **Tree-Based Models:** Always use **SHAP TreeExplainer** (significant speedup)  
+✅ **Neural Networks:** Prefer **Integrated Gradients** or **SHAP**  
+✅ **What-if / Scenario Analysis:** Use **Counterfactual Explanations**  
+✅ **Production / Real-Time Systems:** Use **LIME** or **Global Feature Importance**
 
 ---
 
