@@ -1,105 +1,82 @@
 # 🚀 Explainable AI Agents for Transparent Financial Decision-Making
 
-This repository contains a **production-ready multi-agent XAI system** with comprehensive baseline comparisons, publication-quality visualizations, extensive testing, and complete deployment infrastructure.
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://img.shields.io/badge/tests-82%25%20coverage-green.svg)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This repository presents a **production-ready multi-agent Explainable AI (XAI) system** designed to bring transparency and trust to high-stakes financial decision-making. It features a modular architecture, comprehensive XAI method comparisons, and full deployment infrastructure.
 
 ---
 
-### ✨ Major Features
+## 💡 System Overview: The Multi-Agent Architecture
 
-| Feature                         | Description                                                                                            |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| **🎨 Visualization Suite**      | 8 publication-quality figures including system architecture, XAI comparisons, feature importance plots |
-| **📊 Baseline Comparisons**     | 3-4 baseline models with comprehensive performance tables                                              |
-| **📖 XAI Method Guide**         | Detailed decision tree for method selection with computational cost comparison                         |
-| **🧪 Testing**                  | 80%+ test coverage with pytest, unit and integration tests                                             |
-| **🚀 Production API**           | FastAPI REST API with OpenAPI documentation                                                            |
-| **🐳 Deployment**               | Docker Compose and Kubernetes manifests                                                                |
-| **📈 Monitoring**               | Prometheus metrics and Grafana dashboards                                                              |
-| **⚡ Performance Optimization** | Caching, batch processing, profiling for XAI methods                                                   |
+The core of the system is an **Orchestrator Agent** that coordinates a pipeline of specialized agents to generate a decision, an explanation, and a narrative in a single, auditable process. This approach ensures that every decision is fully traceable and explainable.
 
----
+### Table 1: Multi-Agent System Components
 
-## 📊 Results
-
-### Baseline Model Comparison
-
-| Model               | ROC-AUC   | Accuracy  | F1 Score  | Inference Time            | Training Time |
-| ------------------- | --------- | --------- | --------- | ------------------------- | ------------- |
-| Logistic Regression | 0.685     | 0.692     | 0.710     | **2.1ms**                 | 0.8s          |
-| Random Forest       | **0.732** | **0.715** | **0.728** | 3.8ms                     | 2.4s          |
-| Neural Network      | 0.698     | 0.701     | 0.715     | 4.2ms                     | 12.3s         |
-| **Full XAI System** | **0.732** | **0.715** | **0.728** | 340ms (with explanations) | -             |
-
-**Key Insight:** Interpretable models (Random Forest) can match or outperform black-box models while providing better explanations.
-
-### XAI Method Performance Comparison
-
-| Method                   | Avg Time  | Memory   | Faithfulness | Use Case                                     |
-| ------------------------ | --------- | -------- | ------------ | -------------------------------------------- |
-| **SHAP**                 | 850ms     | 450MB    | **0.85**     | High-stakes decisions, regulatory compliance |
-| **LIME**                 | **180ms** | **80MB** | 0.75         | Large-scale deployment, real-time systems    |
-| **Integrated Gradients** | 320ms     | 200MB    | 0.80         | Neural networks, research                    |
-| **Counterfactual**       | 2300ms    | 60MB     | 0.70         | What-if analysis, customer-facing            |
-
-### Trust Score Improvement
-
-| System                    | Trust Score (1-5) | Improvement |
-| ------------------------- | ----------------- | ----------- |
-| Black-box Model           | 2.9               | Baseline    |
-| Model + SHAP              | 3.6               | +24%        |
-| Model + LIME              | 3.4               | +17%        |
-| **Full XAI Agent System** | **4.1**           | **+41%**    |
+| Agent Component        | Role                     | Key Functionality                                                                                             | Code Location                       |
+| :--------------------- | :----------------------- | :------------------------------------------------------------------------------------------------------------ | :---------------------------------- |
+| **Orchestrator Agent** | **Workflow Control**     | Manages the entire process: data collection, decision, XAI generation, narrative creation, and audit logging. | `code/agents/orchestrator.py`       |
+| **Decision Agent**     | **Prediction**           | Loads and executes the trained financial model (e.g., Random Forest) to make a prediction.                    | `code/agents/decision_agent.py`     |
+| **XAI Agent**          | **Attribution**          | Selects and runs the appropriate XAI method (SHAP, LIME, etc.) to generate feature attributions.              | `code/agents/xai_agent.py`          |
+| **Explanation Agent**  | **Narrative Generation** | Translates complex XAI attributions into a human-readable, context-aware narrative explanation.               | `code/agents/explanation_agent.py`  |
+| **Evidence Collector** | **Context & Metrics**    | Gathers model performance metrics and relevant contextual data for the audit log.                             | `code/agents/evidence_collector.py` |
+| **PII Redactor**       | **Privacy**              | Ensures sensitive Personally Identifiable Information (PII) is redacted before processing or logging.         | `code/agents/privacy.py`            |
 
 ---
 
-## 🏗️ Architecture
+## 📊 Results and Benchmarks
 
-```
-xai-agents/
-├── code/
-│   ├── agents/              # Multi-agent system
-│   ├── models/              # Baseline models
-│   │   └── baseline_models.py
-│   ├── xai/                 # XAI methods implementation
-│   │   └── xai_methods.py
-│   ├── scripts/
-│   │   ├── comprehensive_demo.py      # Full demo
-│   │   └── visualization_suite.py     # 8 figures
-│   └── ...
-│
-├── api/                     # Production API
-│   └── api_server.py       # FastAPI REST API
-│
-├── deployment/              # Deployment infrastructure
-│   ├── docker/
-│   │   ├── Dockerfile.production
-│   │   └── docker-compose.prod.yml
-│   └── kubernetes/
-│       └── deployment.yaml
-│
-├── monitoring/              # Monitoring setup
-│   ├── prometheus.yml
-│   ├── metrics.py
-│   └── alert_rules.yml
-│
-├── tests_comprehensive/     # Testing (80%+ coverage)
-│   └── test_baseline_and_xai.py
-│
-├── docs/                    # Comprehensive documentation
-│   └── XAI_METHOD_SELECTION_GUIDE.md
-│
-├── visualizations/          # Generated figures
-│   ├── 01_system_architecture.png
-│   ├── 02_xai_method_comparison.png
-│   ├── 03_feature_importance.png
-│   ├── 04_model_performance.png
-│   ├── 05_human_trust_results.png
-│   ├── 06_xai_performance_tradeoffs.png
-│   ├── 07_latency_breakdown.png
-│   └── 08_xai_decision_tree.png
-│
-└── requirements-api.txt     # API dependencies
-```
+The system was rigorously tested against standard machine learning baselines and various XAI methods to quantify the trade-offs between performance, explainability, and human trust.
+
+### Table 2: Model Performance Comparison
+
+The full XAI system leverages the best-performing baseline model (Random Forest) and adds the explanation layer.
+
+| Model               | ROC-AUC   | Accuracy  | F1 Score  | Inference Time (Prediction Only) |
+| :------------------ | :-------- | :-------- | :-------- | :------------------------------- |
+| **Random Forest**   | **0.732** | **0.715** | **0.728** | 3.8ms                            |
+| Logistic Regression | 0.685     | 0.692     | 0.710     | **2.1ms**                        |
+| Neural Network      | 0.698     | 0.701     | 0.715     | 4.2ms                            |
+| **Full XAI System** | **0.732** | **0.715** | **0.728** | 340ms (with full explanation)    |
+
+### Table 3: XAI Method Performance and Trade-offs
+
+| Method                   | Avg Time (ms) | Memory (MB) | Faithfulness | Best Use Case                                |
+| :----------------------- | :------------ | :---------- | :----------- | :------------------------------------------- |
+| **SHAP**                 | 850           | 450         | **0.85**     | High-stakes decisions, regulatory compliance |
+| **LIME**                 | **180**       | **80**      | 0.75         | Large-scale deployment, real-time systems    |
+| **Integrated Gradients** | 320           | 200         | 0.80         | Neural networks, research                    |
+| **Counterfactual**       | 2300          | 60          | 0.70         | What-if analysis, customer-facing            |
+
+### Table 4: Human Trust Improvement
+
+A human study demonstrated that the full multi-agent XAI system significantly improves user trust compared to black-box models.
+
+| System                    | Trust Score (1-5) | Improvement over Baseline |
+| :------------------------ | :---------------- | :------------------------ |
+| Black-box Model           | 2.9               | Baseline                  |
+| Model + SHAP              | 3.6               | +24%                      |
+| Model + LIME              | 3.4               | +17%                      |
+| **Full XAI Agent System** | **4.1**           | **+41%**                  |
+
+---
+
+## 🛠️ Project Structure and Core Components
+
+The repository is organized for clarity, separating the core logic, API, deployment, and analysis tools.
+
+| Directory         | Description                                                               | Key Files                                                        |
+| :---------------- | :------------------------------------------------------------------------ | :--------------------------------------------------------------- |
+| `code/agents/`    | Implementation of the multi-agent system components.                      | `orchestrator.py`, `xai_agent.py`, `explanation_agent.py`        |
+| `code/models/`    | Baseline model definitions and comparison logic.                          | `baseline_models.py`                                             |
+| `code/xai/`       | Implementations of various XAI methods and the selection logic.           | `xai_methods.py`, `XAIMethodSelector`                            |
+| `api/`            | Production-ready FastAPI server for serving predictions and explanations. | `api_server.py`                                                  |
+| `scripts/`        | Utility scripts for running demos, experiments, and visualizations.       | `comprehensive_demo.py`, `visualization_suite.py`                |
+| `deployment/`     | Infrastructure-as-Code for production deployment.                         | `docker-compose.prod.yml`, `deployment.yaml` (Kubernetes)        |
+| `monitoring/`     | Configuration for Prometheus and Grafana to monitor XAI performance.      | `prometheus.yml`, `alert_rules.yml`                              |
+| `visualizations/` | Directory containing the 8 generated publication-quality figures.         | `01_system_architecture.png`, `06_xai_performance_tradeoffs.png` |
+| `docs/`           | Detailed documentation and guides.                                        | `XAI_METHOD_SELECTION_GUIDE.md`                                  |
 
 ---
 
@@ -107,275 +84,104 @@ xai-agents/
 
 ### Option 1: Run Comprehensive Demo (Recommended)
 
+This script runs the full workflow: data generation, model training, XAI generation, and visualization.
+
 ```bash
-# Clone repository
-git clone https://github.com/quantsingularity/Explainable-AI-Agents-for-Transparent-Financial-Decision-Making
+# 1. Clone repository
+git clone https://github.com/quantsingularity/Explainable-AI-Agents-for-Transparent-Financial-Decision-Making.git
 cd Explainable-AI-Agents-for-Transparent-Financial-Decision-Making
 
-# Install dependencies
+# 2. Install dependencies
 pip install -r requirements.txt
 pip install -r requirements-api.txt
 
-# Run comprehensive demonstration
+# 3. Run comprehensive demonstration
 python code/scripts/comprehensive_demo.py
 ```
 
-**This will:**
+**Output:**
 
-- ✅ Generate synthetic financial data
-- ✅ Train 3 baseline models (Logistic, RF, Neural Net)
-- ✅ Compare model performance
-- ✅ Generate SHAP and LIME explanations
-- ✅ Create 8 publication-quality figures
-- ✅ Show performance metrics and recommendations
+- Model performance comparison printed to console.
+- XAI method performance metrics printed to console.
+- **8 publication-quality figures** saved to the `visualizations/` directory.
 
-### Option 2: Run Production API
+### Option 2: Launch Production API
+
+The system is designed to be deployed as a microservice using FastAPI.
 
 ```bash
-# Start the FastAPI server
+# Local launch
 python api/api_server.py
 
-# Or with Docker
-docker-compose -f deployment/docker/docker-compose.prod.yml up
+# Docker launch (Recommended for production)
+docker-compose -f deployment/docker/docker-compose.prod.yml up -d
 ```
 
-**API Endpoints:**
+**Key API Endpoints (available at `http://localhost:8000/docs`):**
 
-- `GET /health` - Health check
-- `GET /docs` - Interactive API documentation
-- `POST /predict` - Make predictions
-- `POST /explain` - Generate explanations
-- `GET /explain/recommend` - Get XAI method recommendation
-- `GET /metrics` - Prometheus metrics
+| Endpoint   | Method | Description                                                     |
+| :--------- | :----- | :-------------------------------------------------------------- |
+| `/health`  | `GET`  | Health check for service status.                                |
+| `/predict` | `POST` | Make a financial prediction using the Decision Agent.           |
+| `/explain` | `POST` | Generate a full XAI explanation and narrative for a prediction. |
+| `/metrics` | `GET`  | Prometheus metrics endpoint for monitoring.                     |
 
-**Example API Usage:**
+---
 
-```python
-import requests
+## 🔬 XAI Method Selection Guide
 
-# Make prediction
-response = requests.post('http://localhost:8000/predict', json={
-    "features": [0.5, -0.3, 1.2, 0.8, -0.5, 0.2, 0.9, -0.1, 0.4, 0.7],
-    "model_name": "default"
-})
-print(response.json())
+Choosing the right XAI method is crucial. The system includes a selection guide based on model type, dataset size, and time constraints.
 
-# Get explanation
-response = requests.post('http://localhost:8000/explain', json={
-    "features": [0.5, -0.3, 1.2, 0.8, -0.5, 0.2, 0.9, -0.1, 0.4, 0.7],
-    "model_name": "default",
-    "method": "SHAP",
-    "num_samples": 100
-})
-print(response.json())
-```
+### Table 5: XAI Method Selection Matrix
 
-### Option 3: Run Tests
+| Requirement / Constraint            | Recommended Method          | Reasoning                                              |
+| :---------------------------------- | :-------------------------- | :----------------------------------------------------- |
+| **Regulatory Compliance**           | SHAP                        | Highest faithfulness and theoretical soundness.        |
+| **Real-time Scoring (<200ms)**      | LIME / Feature Importance   | Fastest computational time, model-agnostic.            |
+| **Tree-based Models (RF, XGBoost)** | SHAP TreeExplainer          | Optimized SHAP variant, 100x faster than Kernel SHAP.  |
+| **Neural Networks**                 | Integrated Gradients / SHAP | Best for gradient-based or complex non-linear models.  |
+| **"What-if" Analysis**              | Counterfactual Explanations | Provides actionable insights for changing the outcome. |
+| **Large Datasets (>10k)**           | LIME                        | More scalable than SHAP KernelExplainer.               |
+
+**For a detailed decision tree and best practices, see:** [`docs/XAI_METHOD_SELECTION_GUIDE.md`](docs/XAI_METHOD_SELECTION_GUIDE.md)
+
+---
+
+## 🧪 Testing and Quality Assurance
+
+The repository maintains high code quality with a comprehensive test suite.
+
+| Test Category         | Coverage            | Key Files                                      |
+| :-------------------- | :------------------ | :--------------------------------------------- |
+| **Unit Tests**        | 82%+                | `code/tests/`                                  |
+| **Integration Tests** | Full Pipeline       | `tests_comprehensive/test_baseline_and_xai.py` |
+| **Performance Tests** | Latency Tracking    | `code/xai/xai_methods.py`                      |
+| **API Tests**         | Endpoint Validation | Implicit in `tests_comprehensive/`             |
 
 ```bash
-# Run comprehensive test suite with coverage
-pytest tests_comprehensive/ -v --cov=code --cov-report=html --cov-report=term-missing
-
-# View coverage report
-open htmlcov/index.html  # Opens in browser
+# Run the full test suite with coverage report
+pytest tests_comprehensive/ -v --cov=code --cov-report=html
 ```
 
 ---
 
-## 📊 Visualization Gallery
+## 🖼️ Visualization Gallery
 
-The enhanced system generates **8 publication-quality figures**:
+The `visualization_suite.py` script generates 8 figures designed for publication and presentation, covering every aspect of the system.
 
-### 1. System Architecture
-
-Multi-agent workflow with data flow visualization
-
-### 2. XAI Method Comparison
-
-Side-by-side comparison of SHAP, LIME, IG, and Counterfactuals across:
-
-- Computational cost
-- Execution time
-- Capabilities (radar chart)
-- Use case matrix
-
-### 3. Feature Importance
-
-Feature importance plots for all baseline models
-
-### 4. Model Performance Comparison
-
-Bar charts comparing ROC-AUC, Accuracy, F1, and Inference Time
-
-### 5. Human Trust Results
-
-Trust score analysis showing 41% improvement with full XAI system
-
-### 6. XAI Performance Trade-offs
-
-Scatter plot showing speed vs. quality trade-offs
-
-### 7. Latency Breakdown
-
-Pie and bar charts showing where time is spent in explanation generation
-
-### 8. XAI Decision Tree Guide
-
-Visual decision tree for selecting the right XAI method
-
-**All figures are saved in `visualizations/` directory at 300 DPI for publication.**
-
----
-
-## 📖 XAI Method Selection Guide
-
-### Quick Decision Tree
-
-```
-Need explanation?
-├─ Time budget < 100ms? → Use Feature Importance
-├─ Tree-based model? → Use SHAP Tree Explainer
-├─ Linear model? → Use Coefficients or LIME
-├─ Dataset > 10k samples? → Use LIME
-├─ Features < 20? → Use SHAP
-├─ Need what-if? → Use Counterfactuals
-├─ Neural network? → Use Integrated Gradients
-└─ Default → Use LIME
-```
-
-**For detailed guidance, see:** [`docs/XAI_METHOD_SELECTION_GUIDE.md`](docs/XAI_METHOD_SELECTION_GUIDE.md)
-
-### Method Recommendations
-
-| Scenario              | Primary Method        | Reasoning                 |
-| --------------------- | --------------------- | ------------------------- |
-| Regulatory compliance | SHAP                  | Most faithful, defensible |
-| Customer-facing app   | LIME                  | Fast, scalable            |
-| Model debugging       | SHAP                  | Deep insights             |
-| Real-time scoring     | Feature Importance    | Ultra-fast                |
-| Financial decisions   | SHAP + Counterfactual | Accuracy + what-if        |
-| Healthcare            | Integrated Gradients  | Neural nets, high stakes  |
-| Batch processing      | SHAP                  | Speed less critical       |
-
----
-
-## 🧪 Testing & Quality Assurance
-
-### Test Coverage: **82%+**
-
-```bash
-# Run full test suite
-pytest tests_comprehensive/ -v --cov
-
-# Coverage by module:
-# - models/baseline_models.py: 85%
-# - xai/xai_methods.py: 80%
-# - api/api_server.py: 78%
-```
-
-### Test Categories
-
-- ✅ **Unit Tests:** Individual model and explainer testing
-- ✅ **Integration Tests:** Full pipeline from data to explanation
-- ✅ **Performance Tests:** Latency and memory tracking
-- ✅ **API Tests:** Endpoint validation and error handling
-
----
-
-## 🚀 Production Deployment
-
-### Docker Deployment
-
-```bash
-# Build and run with Docker Compose
-cd deployment/docker
-docker-compose -f docker-compose.prod.yml up -d
-
-# Services started:
-# - xai-api:8000 (API server)
-# - prometheus:9090 (Monitoring)
-# - grafana:3000 (Dashboards)
-# - nginx:80 (Reverse proxy)
-```
-
-### Kubernetes Deployment
-
-```bash
-# Apply Kubernetes manifests
-kubectl apply -f deployment/kubernetes/
-
-# This creates:
-# - Deployment with 3 replicas
-# - LoadBalancer service
-# - HorizontalPodAutoscaler (3-10 pods)
-# - PersistentVolumeClaims for models/results
-```
-
-### Monitoring
-
-**Prometheus metrics available at `/metrics`:**
-
-- `xai_predictions_total` - Total predictions
-- `xai_prediction_latency_seconds` - Prediction latency
-- `xai_explanations_total` - Total explanations
-- `xai_explanation_latency_seconds` - Explanation latency
-- `xai_models_loaded` - Number of loaded models
-- `xai_cache_hits_total` / `xai_cache_misses_total` - Cache performance
-- `xai_errors_total` - Error tracking
-
-**Alerts configured for:**
-
-- High error rate (>5%)
-- High latency (>1s for predictions)
-- No models loaded
-- Low cache hit rate (<30%)
-
----
-
-## ⚡ Performance Optimization
-
-### Implemented Optimizations
-
-1. **SHAP Caching:**
-   - Stores previously computed explanations
-   - Hash-based cache lookup
-   - 10x speedup for repeated queries
-
-2. **Batch Processing:**
-   - Vectorized operations for multiple instances
-   - Reduces overhead for large batches
-
-3. **Background Data Sampling:**
-   - Limits SHAP background data to 100 samples
-   - Maintains explanation quality while reducing compute
-
-4. **Lazy Initialization:**
-   - Explainers initialized only when needed
-   - Reduces startup time and memory
-
-5. **Method-Specific Optimizations:**
-   - SHAP TreeExplainer for tree models (100x faster)
-   - Reduced LIME sampling for time-constrained scenarios
-   - Configurable integration steps for IG
-
-### Performance Benchmarks
-
-| Operation         | Before | After    | Improvement |
-| ----------------- | ------ | -------- | ----------- |
-| SHAP (first call) | 850ms  | 850ms    | -           |
-| SHAP (cached)     | 850ms  | **<1ms** | **850x**    |
-| LIME (batch 100)  | 18s    | **12s**  | **1.5x**    |
-| API cold start    | 5s     | **2s**   | **2.5x**    |
-
----
-
-## 📚 Documentation
-
-- **[XAI Method Selection Guide](docs/XAI_METHOD_SELECTION_GUIDE.md)** - Comprehensive guide for choosing XAI methods
-- **[API Documentation](http://localhost:8000/docs)** - Interactive OpenAPI docs (when server running)
+| Figure ID | Title                      | Description                                                |
+| :-------- | :------------------------- | :--------------------------------------------------------- |
+| **01**    | System Architecture        | Multi-agent workflow and data flow diagram.                |
+| **02**    | XAI Method Comparison      | Radar chart comparing SHAP, LIME, IG, and Counterfactuals. |
+| **03**    | Feature Importance         | Feature importance plots for all baseline models.          |
+| **04**    | Model Performance          | Bar chart comparing ROC-AUC, Accuracy, and F1 scores.      |
+| **05**    | Human Trust Results        | Analysis of trust score improvement with XAI.              |
+| **06**    | XAI Performance Trade-offs | Scatter plot showing speed vs. faithfulness.               |
+| **07**    | Latency Breakdown          | Pie chart showing time spent in each agent's step.         |
+| **08**    | XAI Decision Tree          | Visual guide for selecting the optimal XAI method.         |
 
 ---
 
 ## 📄 License
 
-MIT License - See [LICENSE](LICENSE) file
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
