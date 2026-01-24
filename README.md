@@ -8,7 +8,9 @@ This repository presents a **production-ready multi-agent Explainable AI (XAI) s
 
 ---
 
-## 💡 System Overview: The Multi-Agent Architecture
+# 💡 System Overview
+
+## The Multi-Agent Architecture
 
 The core of the system is an **Orchestrator Agent** that coordinates a pipeline of specialized agents to generate a decision, an explanation, and a narrative in a single, auditable process. This approach ensures that every decision is fully traceable and explainable.
 
