@@ -12,7 +12,6 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import numpy as np
-import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -420,6 +419,8 @@ async def recommend_xai_method(
 
 # Run the application
 if __name__ == "__main__":
+    import uvicorn
+
     uvicorn.run(
         "api_server:app", host="0.0.0.0", port=8000, reload=True, log_level="info"
     )

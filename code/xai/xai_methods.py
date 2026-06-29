@@ -173,11 +173,21 @@ class LIMEExplainer(XAIMethod):
 
         start_time = time.time()
 
+        # LIME requires a predict function returning per-class probabilities with
+        # shape (n_samples, n_classes). This project's models expose
+        # ``predict_proba`` returning the positive-class probability as a 1-D
+        # array, so wrap it into the two-column form LIME expects.
+        def lime_predict_fn(data: np.ndarray) -> np.ndarray:
+            proba = np.asarray(self.model.predict_proba(data), dtype=float)
+            proba = proba.reshape(-1)
+            proba = np.clip(proba, 0.0, 1.0)
+            return np.column_stack([1.0 - proba, proba])
+
         explanations = []
         for instance in X:
             exp = self.explainer.explain_instance(
                 instance,
-                self.model.predict_proba,
+                lime_predict_fn,
                 num_features=num_features,
                 num_samples=num_samples,
             )

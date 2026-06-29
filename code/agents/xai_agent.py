@@ -5,10 +5,7 @@ XAI Agent: Provides post-hoc explanations using SHAP, LIME, and Integrated Gradi
 from typing import Any, Dict
 
 import numpy as np
-import shap
 import torch
-from captum.attr import IntegratedGradients
-from lime import lime_tabular
 from loguru import logger
 
 
@@ -49,6 +46,14 @@ class XAIAgent:
                         return model(torch.FloatTensor(x)).numpy().flatten()
 
             # Sample background data for efficiency
+            try:
+                import shap
+            except ImportError as exc:  # pragma: no cover - optional dependency
+                raise ImportError(
+                    "shap is required for the 'shap' explanation method. "
+                    "Install it with `pip install shap`."
+                ) from exc
+
             background = shap.sample(
                 X_train, min(100, len(X_train)), random_state=self.seed
             )
@@ -65,6 +70,14 @@ class XAIAgent:
                         probs = model(torch.FloatTensor(x)).numpy()
                     return np.column_stack([1 - probs, probs])
 
+            try:
+                from lime import lime_tabular
+            except ImportError as exc:  # pragma: no cover - optional dependency
+                raise ImportError(
+                    "lime is required for the 'lime' explanation method. "
+                    "Install it with `pip install lime`."
+                ) from exc
+
             self.explainer = lime_tabular.LimeTabularExplainer(
                 X_train,
                 feature_names=feature_names,
@@ -77,6 +90,13 @@ class XAIAgent:
             # Only works with neural networks
             if not isinstance(model, torch.nn.Module):
                 raise ValueError("Integrated Gradients requires a PyTorch model")
+            try:
+                from captum.attr import IntegratedGradients
+            except ImportError as exc:  # pragma: no cover - optional dependency
+                raise ImportError(
+                    "captum is required for the 'integrated_gradients' method. "
+                    "Install it with `pip install captum`."
+                ) from exc
             self.explainer = IntegratedGradients(model)
             self.baseline = torch.FloatTensor(X_train.mean(axis=0)).unsqueeze(0)
 
