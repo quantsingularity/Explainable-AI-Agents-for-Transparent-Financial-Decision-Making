@@ -135,14 +135,14 @@ Full decision tree and best practices: [`docs/XAI_METHOD_SELECTION_GUIDE.md`](do
 ## Testing
 
 ```bash
-pytest tests_comprehensive/ -v --cov=code --cov-report=html
+pytest code/tests/ -v --cov=code --cov-report=html
 ```
 
-| Type              | Coverage         | Location                                       |
-| :---------------- | :--------------- | :--------------------------------------------- |
-| Unit Tests        | 82%+             | `code/tests/`                                  |
-| Integration Tests | Full pipeline    | `tests_comprehensive/test_baseline_and_xai.py` |
-| Performance Tests | Latency tracking | `code/xai/xai_methods.py`                      |
+| Type              | Coverage         | Location                              |
+| :---------------- | :--------------- | :------------------------------------ |
+| Unit Tests        | 82%+             | `code/tests/`                         |
+| Integration Tests | Full pipeline    | `code/tests/test_baseline_and_xai.py` |
+| Performance Tests | Latency tracking | `code/xai/xai_methods.py`             |
 
 ---
 

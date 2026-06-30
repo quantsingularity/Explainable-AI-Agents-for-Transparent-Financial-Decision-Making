@@ -20,6 +20,19 @@ from agents.orchestrator import Orchestrator
 from data.fetch_data import DataFetcher
 
 
+def _json_default(obj):
+    """JSON serializer for numpy scalar/array types not handled by default."""
+    if isinstance(obj, np.integer):
+        return int(obj)
+    if isinstance(obj, np.floating):
+        return float(obj)
+    if isinstance(obj, np.bool_):
+        return bool(obj)
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    return str(obj)
+
+
 def run_experiment(mode: str = "quick", seed: int = 42, n_folds: int = 1):
     """
     Run complete experiment pipeline.
@@ -178,7 +191,7 @@ def run_single_experiment(
                     results_dir, f"example_{model_type}_{xai_method}_{i}.json"
                 )
                 with open(example_path, "w") as f:
-                    json.dump(explanation, f, indent=2)
+                    json.dump(explanation, f, indent=2, default=_json_default)
 
         except Exception as e:
             logger.warning(f"Failed to explain instance {idx}: {e}")
