@@ -2,6 +2,77 @@
 Main experiment runner: trains models, generates explanations, computes metrics.
 """
 
+import logging as _lg
+
+# --- keep run output readable: suppress benign third-party noise (auto-added) ---
+import os as _os
+import warnings as _w
+
+_os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
+_os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+_os.environ.setdefault("GRPC_VERBOSITY", "ERROR")
+for _m in (
+    r".*does not have valid feature names.*",
+    r".*tight_layout.*",
+    r".*Gym has been unmaintained.*",
+    r".*not wrapped with a ``Monitor``.*",
+):
+    _w.filterwarnings("ignore", message=_m)
+_w.filterwarnings("ignore", category=DeprecationWarning)
+_w.filterwarnings("ignore", category=FutureWarning)
+try:
+    from sklearn.exceptions import ConvergenceWarning as _CW
+
+    _w.filterwarnings("ignore", category=_CW)
+except Exception:
+    pass
+for _n in (
+    "matplotlib",
+    "PIL",
+    "urllib3",
+    "yfinance",
+    "tensorflow",
+    "absl",
+    "gym",
+    "gymnasium",
+    "shap",
+    "numba",
+    "h5py",
+):
+    _lg.getLogger(_n).setLevel(_lg.ERROR)
+
+
+def _silence_tqdm():
+    try:
+        import tqdm.std as _tstd
+
+        _orig = _tstd.tqdm.__init__
+
+        def _init(self, *a, **k):
+            k["disable"] = True
+            _orig(self, *a, **k)
+
+        _tstd.tqdm.__init__ = _init
+        try:
+            from tqdm import auto as _ta
+
+            if _ta.tqdm is not _tstd.tqdm:
+                _o2 = _ta.tqdm.__init__
+
+                def _init2(self, *a, **k):
+                    k["disable"] = True
+                    _o2(self, *a, **k)
+
+                _ta.tqdm.__init__ = _init2
+        except Exception:
+            pass
+    except Exception:
+        pass
+
+
+_silence_tqdm()
+# --- end output cleanup ---
+
 import argparse
 import json
 import os
@@ -116,11 +187,36 @@ def run_experiment(mode: str = "quick", seed: int = 42, n_folds: int = 1):
     logger.info(f"Results saved to {results_csv}")
 
     # Print summary
-    print("\n" + "=" * 60)
-    print("EXPERIMENT SUMMARY")
-    print("=" * 60)
-    print(results_df.to_string(index=False))
-    print("=" * 60)
+    _cols = [
+        "model_type",
+        "xai_method",
+        "auc",
+        "accuracy",
+        "mean_faithfulness",
+        "mean_explanation_time",
+    ]
+    W = 66
+    print("\n" + "=" * W)
+    print("EXPERIMENT SUMMARY".center(W))
+    print("=" * W)
+    print(f"{'Model':<14}{'XAI':<7}{'AUC':>7}{'Acc':>7}{'Faithful':>11}{'Time(s)':>10}")
+    print("-" * W)
+    for _r in results_df[_cols].values.tolist():
+        print(
+            f"{str(_r[0]):<14}{str(_r[1]):<7}{_r[2]:>7.3f}"
+            f"{_r[3]:>7.3f}{_r[4]:>11.3f}{_r[5]:>10.3f}"
+        )
+    _best = results_df.loc[results_df["auc"].idxmax()]
+    _faith = results_df.loc[results_df["mean_faithfulness"].idxmax()]
+    print("-" * W)
+    print(
+        f"Best AUC ....... {_best['model_type']}/{_best['xai_method']} = {_best['auc']:.3f}"
+    )
+    print(
+        f"Most faithful .. {_faith['model_type']}/{_faith['xai_method']} "
+        f"= {_faith['mean_faithfulness']:.3f}"
+    )
+    print("=" * W)
 
     return results_df
 

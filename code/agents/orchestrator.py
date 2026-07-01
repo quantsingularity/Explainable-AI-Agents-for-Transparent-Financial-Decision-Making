@@ -166,7 +166,7 @@ class Orchestrator:
         # Add to audit log
         self._log_explanation(complete_explanation, applicant_data)
 
-        logger.info(f"Explanation generated in {elapsed_time:.2f}s")
+        logger.debug(f"Explanation generated in {elapsed_time:.2f}s")
 
         return complete_explanation
 

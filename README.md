@@ -117,6 +117,12 @@ API docs available at `http://localhost:8000/docs`.
 
 ---
 
+<!-- output-note -->
+
+### Output
+
+Console output stays readable: benign third-party warnings and library progress bars are suppressed, so only meaningful log lines remain. Each run finishes with a clean, aligned summary block reporting a per-configuration table with the best AUC and most faithful XAI method highlighted.
+
 ## XAI Method Selection
 
 | Requirement                     | Recommended Method        | Reasoning                                      |
